@@ -19,9 +19,21 @@ module.exports = {
         use: ['style-loader', 'css-loader'] // 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的
       },
       {
-        test: /\.(scss|sass)$/,   // 正则匹配以.scss和.sass结尾的文件
-        use: ['style-loader', 'css-loader', 'sass-loader']  // 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的
-    }
+        test: /\.(scss|sass)$/, // 正则匹配以.scss和.sass结尾的文件
+        use: ['style-loader', 'css-loader', 'sass-loader'] // 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的
+      },
+      {
+        // jsx配置
+        test: /(\.jsx|\.js)$/,
+        use: {
+          // 注意use选择如果有多项配置，可写成这种对象形式
+          loader: 'babel-loader',
+          options: {
+            presets: ['env', 'react']
+          }
+        },
+        exclude: /node_modules/
+      }
     ]
   }
 }
