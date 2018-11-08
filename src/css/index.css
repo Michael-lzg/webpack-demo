@@ -1,3 +1,15 @@
 body{
   background-color: rgb(38, 140, 235);
 }
+#root div{
+  width: 200px;
+  margin-top: 50px;
+  transform: rotate(45deg); /* 这个属性会产生前缀 */
+}
+.box{
+  font-size: 18px;
+  background-color: red;
+}
+.a{
+  text-align: center;
+}
