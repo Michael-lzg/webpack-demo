@@ -15,14 +15,6 @@ module.exports = {
     path: path.join(__dirname, '/dist'), //打包后的文件存放的地方
     filename: '[name].js' //打包后输出文件的文件名
   },
-  devServer: {
-    contentBase: './dist', // 本地服务器所加载文件的目录
-    port: '8089', // 设置端口号为8088
-    inline: true, // 文件修改后实时刷新
-    historyApiFallback: true, //不跳转
-    hot: true // 热更新
-  },
-  devtool: 'source-map', // 会生成对于调试的完整的.map文件，但同时也会减慢打包速度
   module: {
     rules: [
       {
@@ -32,7 +24,7 @@ module.exports = {
           // 这里我们需要调用分离插件内的extract方法
           fallback: 'style-loader', // 相当于回滚，经postcss-loader和css-loader处理过的css最终再经过style-loader处理
           use: ['css-loader', 'postcss-loader'],
-          publicPath: '../'  // 给背景图片设置一个公共路径
+          publicPath: '../' // 给背景图片设置一个公共路径
         })
       },
       {
@@ -52,17 +44,16 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.(png|jpg|svg|gif)$/, // 正则匹配图片格式名
+        test: /\.(png|jpg|svg|gif)$/,
         use: [
           {
-            loader: 'url-loader' // 使用url-loader
+            loader: 'url-loader',
+            options: {
+              limit: 1000, // 限制只有小于1kb的图片才转为base64，例子图片为1.47kb,所以不会被转化
+              outputPath: 'images' // 设置打包后图片存放的文件夹名称
+            }
           }
-        ],
-        options: {
-          limit: 10000,
-          name: utils.assetsPath('media/[name].[hash:7].[ext]'),
-          outputPath: 'images' 
-        }
+        ]
       }
     ]
   },
@@ -71,11 +62,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, '/src/index.template.html') // new一个这个插件的实例，并传入相关的参数
     }),
-    new CleanWebpackPlugin(['dist']), // 所要清理的文件夹名称
+    // new CleanWebpackPlugin(['dist']), // 所要清理的文件夹名称
     new webpack.HotModuleReplacementPlugin(), // 热更新插件
     new ExtractTextPlugin('css/index.css'), // 将css分离到/dist文件夹下的css文件夹中的index.css
-    new PurifyCssWebpack({
-      paths: glob.sync(path.join(__dirname, 'src/*.html')) // 同步扫描所有html文件中所引用的css
-    })
+    // new PurifyCssWebpack({
+    //   paths: glob.sync(path.join(__dirname, 'src/*.html')) // 同步扫描所有html文件中所引用的css
+    // })
   ]
 }
